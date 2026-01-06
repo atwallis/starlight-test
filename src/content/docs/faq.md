@@ -1,6 +1,6 @@
 ---
 title: FAQ
-description: A guide in my new Starlight docs site.
+description: Frequently asked questions about Restura
 ---
 
 ## What is Restura?
