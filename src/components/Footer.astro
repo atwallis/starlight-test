@@ -1,0 +1,19 @@
+---
+import Default from '@astrojs/starlight/components/Footer.astro';
+
+const isHomepage = Astro.locals.starlightRoute.id === '';
+---
+
+{
+  isHomepage ? (
+    <footer class="py-12 mt-20" style="background-color: var(--sl-color-bg-nav);">
+      <div class="text-center text-sm text-gray-500 dark:text-gray-400">
+        © 2025 RedSky Engineering
+      </div>
+    </footer>
+  ) : (
+    <Default>
+      <slot />
+    </Default>
+  )
+}

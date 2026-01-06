@@ -10,8 +10,12 @@ export default defineConfig({
   site: 'https://atwallis.com',
   base: '/starlight-test',
   integrations: [starlight({
-      title: 'My Docs',
-      social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/withastro/starlight' }],
+      title: 'Restura',
+      lastUpdated: true,
+      components: {
+        Footer: './src/components/Footer.astro',
+      },
+      social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/atwallis/starlight-test' }],
       sidebar: [
           {
               label: 'Guides',

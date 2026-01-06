@@ -1,42 +1,46 @@
 ---
-title: Welcome to Starlight
-description: Get started building your docs site with Starlight.
+title: Restura
+description: Open-source REST API engine for Node.js 
 template: splash # Remove or comment out this line to display the site sidebar on this page.
 hero:
-  tagline: Congrats on setting up a new Starlight project!
+  tagline: Open-source REST API engine for Node.js
   image:
-    file: ../../assets/houston.webp
+    file: ../../assets/logo.webp
   actions:
-    - text: Example Guide
-      link: /guides/example/
+    - text: Get Started
+      link: ./quickstart/
       icon: right-arrow
-    - text: Read the Starlight docs
-      link: https://starlight.astro.build
-      icon: external
-      variant: minimal
+    # - text: Read the Starlight docs
+    #   link: https://starlight.astro.build
+    #   icon: external
+    #   variant: minimal
 ---
 
 import { Card, CardGrid } from '@astrojs/starlight/components';
-import MyBox from '../../components/MyBox.svelte';
 
-## Next steps
+Restura generates fully-functional Express.js endpoints from a JSON schema. Define your entire API—database tables, routes, request validation, response structure, and authorization—in a single schema file. A companion visual UI lets you create and modify endpoints without writing code, while automatically generating TypeScript types for your request and response objects.
 
-<MyBox title="Test Title"/>
+## Why Restura?
+
+Building REST APIs in Node.js typically involves repetitive boilerplate: route registration, request parsing/validation, SQL query construction, response formatting, and authorization checks. Restura eliminates this by generating all of it from a declarative schema.
+
 <CardGrid stagger>
-	<Card title="Update content" icon="pencil">
-		Edit `src/content/docs/index.mdx` to see this page change.
+	<Card title="Declarative Schema" icon="document">
+		Define **what** data you want—tables, columns, joins, where clauses—and Restura handles the **how**.
 	</Card>
-	<Card title="Change page layout" icon="document">
-		Delete `template: splash` in `src/content/docs/index.mdx` to display a
-		sidebar on this page.
+	<Card title="Zero Boilerplate" icon="rocket">
+		No more repetitive route registration, request parsing, or response formatting. Your schema is your API.
 	</Card>
-	<Card title="Add new content" icon="add-document">
-		Add Markdown or MDX files to `src/content/docs` to create new pages.
+	<Card title="Auto-generated SQL" icon="seti:db">
+		Generates secure, parameterized SQL queries from your schema definition. No more hand-writing queries.
 	</Card>
-	<Card title="Configure your site" icon="setting">
-		Edit your `sidebar` and other config in `astro.config.mjs`.
+	<Card title="Built-in Validation" icon="approve-check-circle">
+		Validate inputs with `TYPE_CHECK`, `ONE_OF`, and other validators—defined right in your schema.
 	</Card>
-	<Card title="Read the docs" icon="open-book">
-		Learn more in [the Starlight Docs](https://starlight.astro.build/).
+	<Card title="Role-based Permissions" icon="random">
+		Enforce role-based and scope-based permissions declaratively. Authorization is built into the schema.
+	</Card>
+	<Card title="Custom Logic Escape Hatch" icon="setting">
+		Need password hashing or external API calls? Use `CUSTOM_ONE`/`CUSTOM_ARRAY` to drop into Express handlers while keeping schema-driven validation.
 	</Card>
 </CardGrid>
