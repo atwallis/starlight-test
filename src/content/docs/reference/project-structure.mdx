@@ -1,0 +1,29 @@
+---
+title: Project structure
+description: Project structure of Restura
+---
+
+import { FileTree } from '@astrojs/starlight/components';
+
+<FileTree>
+
+- packages
+  - core
+  - internal
+- apps
+  - restura-ui
+  - restura-express
+- docs
+
+</FileTree>
+
+### Packages
+- **core** - public package used by developers to build API’s
+- **internal** - internal utility package for functions shared between Restura packages
+
+### Apps
+- **restura-ui** - visual editor for managing Restura API schemas
+- **restura-express** - ExpressJS test application for restura
+
+### Docs
+- **docs** - documentation website
