@@ -1,0 +1,10 @@
+@layer base, starlight, theme, components, utilities;
+
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
+
+/* Optional: customize theme */
+@theme {
+  --font-sans: "Inter", system-ui, sans-serif;
+  --color-accent: oklch(68% 0.15 237);
+}
