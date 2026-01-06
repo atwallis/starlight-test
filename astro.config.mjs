@@ -7,6 +7,8 @@ import svelte from '@astrojs/svelte';
 
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://atwallis.com',
+  base: '/starlight-test',
   integrations: [starlight({
       title: 'My Docs',
       social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/withastro/starlight' }],
