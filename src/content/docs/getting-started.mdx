@@ -7,17 +7,104 @@ import { Aside, Code, TabItem, Tabs } from '@astrojs/starlight/components';
 
 
 ## Requirements
-- Node.js 18+
-- Express 5+
-- A PostgreSQL database (or follow the instructions below to setup a local one)
-- Docker (if setting up a local PostgreSQL database)
-- Docker Compose (if setting up a local PostgreSQL database)
+- [Node.js](https://nodejs.org/) 18+
+- [Express](https://expressjs.com/) 5+
+- [PostgreSQL](https://www.postgresql.org/) database (or follow the instructions below to setup a local one)
+- [Docker Compose](https://docs.docker.com/compose/) (if setting up a local PostgreSQL database)
 
-This tutorial assumes you have a basic understanding of [Node.js](https://nodejs.org/) and [Express](https://expressjs.com/).
+## Create an Express application
+
+### Create a new project
+If you don't already have an Express application, you can create one by following running the following commands in your terminal:
+
+export const setupProjectNpmCode = `mkdir restura-demo
+cd restura-demo
+npm init
+npm install express`;
+
+export const setupProjectPnpmCode = `mkdir restura-demo
+cd restura-demo
+pnpm init
+pnpm add express`;
+
+export const setupProjectYarnCode = `mkdir restura-demo
+cd restura-demo
+yarn init
+yarn add express`;
+
+export const setupProjectBunCode = `mkdir restura-demo
+cd restura-demo
+bun init
+bun add express`;
+
+<Tabs>
+  <TabItem label="npm">
+    <Code code={setupProjectNpmCode} lang="bash"/>
+  </TabItem>
+  <TabItem label="pnpm">
+    <Code code={setupProjectPnpmCode} lang="bash"/>
+  </TabItem>
+  <TabItem label="yarn">
+    <Code code={setupProjectYarnCode} lang="bash"/>
+  </TabItem>
+  <TabItem label="bun">
+    <Code code={setupProjectBunCode} lang="bash"/>
+  </TabItem>
+</Tabs>
+
+### Add an entry file
+
+Create a new file called `server.ts`or `server.js` in the root of your project.
+
+export const touchServerTypescriptCode = `touch server.ts`;
+
+export const touchServerJavascriptCode = `touch server.js`;
+
+<Tabs>
+  <TabItem label="TypeScript">
+    <Code code={touchServerTypescriptCode} lang="bash"/>
+  </TabItem>
+  <TabItem label="JavaScript">
+    <Code code={touchServerJavascriptCode} lang="bash"/>
+  </TabItem>
+</Tabs>
+
+
+### Add a script to run your application
+
+Create a script for running your application by adding the following to your `package.json` file:
+
+export const packageJsonJavascriptCode = `
+{
+  "scripts": {
+    "start": "node server.js"
+  }
+}
+`;
+
+export const packageJsonTypescriptCode = `
+{
+  "scripts": {
+    "start": "node server.ts"
+  }
+}
+`;
+
+<Tabs>
+  <TabItem label="TypeScript">
+    <Code code={packageJsonTypescriptCode} lang="json" title="package.json"/>
+  </TabItem>
+  <TabItem label="JavaScript">
+    <Code code={packageJsonJavascriptCode} lang="json" title="package.json"/>
+  </TabItem>
+</Tabs>
+
+
+Alternatively, you can follow the tutorial at: https://expressjs.com/en/starter/installing.html
 
 ## Installation
 
-We'll start by installing the Restura core package. Run one of the following commands in your terminal:
+Start by installing the Restura Engine from the Restura Core package. Run the following command in your terminal:
 
 <Tabs>
   <TabItem label="npm">
@@ -36,7 +123,7 @@ We'll start by installing the Restura core package. Run one of the following com
 
 ## Add Restura to your Express application
 
-Add Restura to your ExpressJS application by adding the following code to your application's entry file:
+In your entry file, add the following code to initialize the Restura Engine:
 
 export const expressTypescriptCode = `
 import { PsqlPool, restura, type OnValidAuthenticationCallback, type RsRequest, type RsResponse } from '@restura/core';
@@ -105,7 +192,11 @@ const authHandler = async (req, res, onValid) => {
   </TabItem>
 </Tabs>
 
-Replace the PsqlPool configuration with your actual database credentials, unless you are want to use the local PostgreSQL database setup below.
+We setup a [basic ExpressJS application](https://expressjs.com/en/starter/hello-world.html) and then call `restura.init` to attach the Restura Engine to the Express application.
+
+<Aside type="note">
+Please replace the PsqlPool configuration with your actual database credentials, unless you want to follow the local PostgreSQL database setup below.
+</Aside>
 
 ### Local PostgreSQL database
 
@@ -312,33 +403,6 @@ export const resturaSchemaCode = `
 
 ## Run the Restura Engine
 
-Create a script for running your application by adding the following to your `package.json` file:
-
-export const packageJsonTypescriptCode = `
-{
-  "scripts": {
-    "start": "node server.ts"
-  }
-}
-`;
-
-export const packageJsonJavascriptCode = `
-{
-  "scripts": {
-    "start": "node server.js"
-  }
-}
-`;
-
-<Tabs>
-  <TabItem label="TypeScript">
-    <Code code={packageJsonTypescriptCode} lang="json" title="package.json"/>
-  </TabItem>
-  <TabItem label="JavaScript">
-    <Code code={packageJsonJavascriptCode} lang="json" title="package.json"/>
-  </TabItem>
-</Tabs>
-
 Now that you have installed and added the required files, you can run the Restura Engine by starting your application.
 
 <Tabs>
@@ -356,25 +420,21 @@ Now that you have installed and added the required files, you can run the Restur
   </TabItem>
 </Tabs>
 
-When the Engine is runs, it will generate a `src/@types` folder with the following files:
+When the Engine starts, it will generate a `src/@types` folder with the following files:
 - `api.d.ts` - generated API endpoints types
 - `model.d.ts`- generated Restura database table types
 - `restura.d.ts` - generated types used by Restura
 
-## Test The Endpoint
+## Query the `user/list` Endpoint
 
-The `restura.schema.json` file has a `/user/list` endpoint that will return a list of users.
+The Restura schema has a `/user/list` endpoint that will return a list of users.
 
-Test this endpoint by running the following command in your terminal:
+With the Restura Engine running, you can query the `/user/list` endpoint by running the following command in your terminal:
 
-export const queryEndpointsCode = `
-curl -X GET http://localhost:3001/api/v1/user/list
-`;
-
-<Code code={queryEndpointsCode} lang="bash"/>
+<Code code="curl -X GET http://localhost:3001/api/v1/user/list" lang="bash"/>
 
 ## Next Steps
-- [Start the Visual Editor](../visual-editor)
+- [Run the Visual Editor](../visual-editor)
 - [Create a new database table](../guides/database-table)
 - [Create a standard endpoint](../guides/standard-endpoint)
 - [Create a custom endpoint](../guides/custom-endpoint)
