@@ -25,10 +25,10 @@ export default defineConfig({
 						{ label: 'FAQ', slug: 'faq' }
 					]
 				},
-				{
-					label: 'Tutorials',
-					autogenerate: { directory: 'tutorials' }
-				},
+				// {
+				// 	label: 'Tutorials',
+				// 	autogenerate: { directory: 'tutorials' }
+				// },
 				{
 					label: 'Guides',
 					items: [

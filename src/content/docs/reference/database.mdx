@@ -1,0 +1,553 @@
+---
+title: Database
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+## Tables
+
+Tables are the fundamental building blocks of your database schema. Each table represents an entity in your application.
+
+### Default Columns
+
+When you create a new table, Restura automatically generates three columns:
+
+| Column       | Type        | Configuration                     |
+| ------------ | ----------- | --------------------------------- |
+| `id`         | BIGSERIAL   | Auto-increment, primary key       |
+| `createdOn`  | TIMESTAMPTZ | Not nullable, defaults to `now()` |
+| `modifiedOn` | TIMESTAMPTZ | Not nullable, defaults to `now()` |
+
+### Table Properties
+
+| Property              | Description                                        |
+| --------------------- | -------------------------------------------------- |
+| **Name**              | Table name (use `camelCase`, e.g., `userProfile`)  |
+| **Columns**           | Array of column definitions                        |
+| **Indexes**           | Array of index definitions                         |
+| **Foreign Keys**      | Array of foreign key constraints                   |
+| **Check Constraints** | Array of check constraint rules                    |
+| **Roles**             | User roles that can access this table              |
+| **Scopes**            | OAuth-style scopes for fine-grained access control |
+| **Notify**            | Configure real-time notifications for row changes  |
+
+---
+
+## Column Properties
+
+| Property           | Description                                               |
+| ------------------ | --------------------------------------------------------- |
+| **Name**           | Column name (use `camelCase`, e.g., `firstName`)          |
+| **Type**           | Data type (see Column Types below)                        |
+| **Column Value**   | Values for ENUM, JSON type hints, or DECIMAL precision    |
+| **Length**         | Character length for VARCHAR/CHAR types                   |
+| **Auto Increment** | Enable auto-increment (numeric types only)                |
+| **Primary**        | Mark as primary key column                                |
+| **Unique**         | Creates a unique constraint on this column                |
+| **Nullable**       | Whether NULL values are allowed                           |
+| **Default**        | Default value expression (e.g., `now()`, `'active'`, `0`) |
+| **Comment**        | Documentation comment stored in the database              |
+| **Roles**          | User roles that can access this column                    |
+| **Scopes**         | OAuth-style scopes for column-level access control        |
+
+---
+
+## Column Types
+
+Restura supports both PostgreSQL and MariaDB column types. The UI primarily uses PostgreSQL types, which are automatically mapped to appropriate database-specific types.
+
+### Numeric Types
+
+| Type                | Size     | Description                                    | TypeScript |
+| ------------------- | -------- | ---------------------------------------------- | ---------- |
+| `SMALLINT`          | 2 bytes  | -32,768 to 32,767                              | `number`   |
+| `INTEGER`           | 4 bytes  | -2,147,483,648 to 2,147,483,647                | `number`   |
+| `BIGINT`            | 8 bytes  | Large integers (use for IDs and foreign keys)  | `number`   |
+| `BIGSERIAL`         | 8 bytes  | Auto-incrementing big integer                  | `number`   |
+| `SERIAL`            | 4 bytes  | Auto-incrementing integer                      | `number`   |
+| `DECIMAL`/`NUMERIC` | Variable | Exact numeric with user-specified precision    | `string`   |
+| `REAL`              | 4 bytes  | 6 decimal digits precision (single precision)  | `number`   |
+| `DOUBLE PRECISION`  | 8 bytes  | 15 decimal digits precision (double precision) | `number`   |
+| `BOOLEAN`           | 1 byte   | True/false values                              | `boolean`  |
+
+<Aside type="note">
+DECIMAL/NUMERIC types are returned as strings in TypeScript to preserve precision for financial calculations.
+</Aside>
+
+#### DECIMAL Precision
+
+For DECIMAL columns, specify precision in the Column Value field using the format `precision-scale`:
+
+-   `10-2` → 10 total digits, 2 after decimal (e.g., `12345678.90`)
+-   `5-3` → 5 total digits, 3 after decimal (e.g., `12.345`)
+
+### String Types
+
+| Type      | Description                                      | TypeScript |
+| --------- | ------------------------------------------------ | ---------- |
+| `CHAR`    | Fixed-length, blank-padded (set length required) | `string`   |
+| `VARCHAR` | Variable-length with limit (set length required) | `string`   |
+| `TEXT`    | Variable-length without limit                    | `string`   |
+| `BYTEA`   | Binary data                                      | `string`   |
+
+#### MariaDB String Types
+
+| Type         | Max Size | Description          |
+| ------------ | -------- | -------------------- |
+| `TINYTEXT`   | 255 B    | Small text           |
+| `TEXT`       | 64 KB    | Standard text        |
+| `MEDIUMTEXT` | 16 MB    | Medium text          |
+| `LONGTEXT`   | ~2 GB    | Large text           |
+| `TINYBLOB`   | 255 B    | Small binary data    |
+| `BLOB`       | 64 KB    | Standard binary data |
+| `MEDIUMBLOB` | 16 MB    | Medium binary data   |
+| `LONGBLOB`   | ~2 GB    | Large binary data    |
+
+### Date/Time Types
+
+| Type          | Description                                      | TypeScript |
+| ------------- | ------------------------------------------------ | ---------- |
+| `DATE`        | Calendar date (year, month, day)                 | `string`   |
+| `TIME`        | Time of day (without time zone)                  | `string`   |
+| `TIMESTAMP`   | Date and time (without time zone)                | `string`   |
+| `TIMESTAMPTZ` | Date and time (with time zone) - **recommended** | `string`   |
+| `INTERVAL`    | Time span                                        | `string`   |
+| `DATETIME`    | Date and time (MariaDB, mapped to TIMESTAMPTZ)   | `string`   |
+
+<Aside type="tip">
+Use `TIMESTAMPTZ` (timestamp with time zone) for most date/time fields to avoid timezone issues.
+</Aside>
+
+### JSON Types
+
+| Type    | Description                                         | TypeScript         |
+| ------- | --------------------------------------------------- | ------------------ |
+| `JSON`  | Stores JSON data as raw text                        | `object` or custom |
+| `JSONB` | Binary JSON format, optimized for query performance | `object` or custom |
+
+#### JSON Type Hints
+
+For JSON/JSONB columns, you can specify TypeScript type hints in the Column Value field:
+
+```
+MyCustomType, AnotherType
+```
+
+This generates: `MyCustomType | AnotherType` in the TypeScript definitions.
+
+### Enumerated Types
+
+| Type   | Description                                          | TypeScript   |
+| ------ | ---------------------------------------------------- | ------------ |
+| `ENUM` | Enumerated values (PostgreSQL uses CHECK constraint) | String union |
+
+#### ENUM Values
+
+Define ENUM options in the Column Value field:
+
+```
+'PENDING','ACTIVE','COMPLETED'
+```
+
+This generates:
+
+-   Database: `CHECK ("status" IN ('PENDING','ACTIVE','COMPLETED'))`
+-   TypeScript: `'PENDING' | 'ACTIVE' | 'COMPLETED'`
+
+---
+
+## Smart Column Name Detection
+
+When you create a new column, Restura automatically configures it based on naming patterns:
+
+| Pattern                          | Auto Configuration                                           |
+| -------------------------------- | ------------------------------------------------------------ |
+| `*Id` (e.g., `userId`)           | BIGINT, creates index, creates foreign key to matching table |
+| `id`                             | BIGINT, auto-increment, not nullable                         |
+| `*On` (e.g., `createdOn`)        | DATETIME/TIMESTAMPTZ, not nullable, defaults to `now()`      |
+| `firstName`, `lastName`, `name`  | VARCHAR(30)                                                  |
+| `address1`                       | VARCHAR(30)                                                  |
+| `role`                           | ENUM with `'ADMIN','USER'` values                            |
+| `is*`, `has*` (e.g., `isActive`) | BOOLEAN, not nullable                                        |
+
+### Foreign Key Auto-Detection
+
+When you name a column ending with `Id` (e.g., `userId`), Restura:
+
+1. Sets the type to `BIGINT`
+2. Creates a non-unique index on the column
+3. Looks for a table matching the prefix (e.g., `user`)
+4. If found, creates a foreign key to that table's `id` column
+5. Adds a comment documenting the relationship
+
+---
+
+## Indexes
+
+Indexes improve query performance by allowing the database to find rows faster.
+
+### Index Properties
+
+| Property        | Description                                          |
+| --------------- | ---------------------------------------------------- |
+| **Name**        | Auto-generated: `{table}_{columns}[_unique]_index`   |
+| **Unique**      | Enforces uniqueness across indexed columns           |
+| **Order**       | Sort order: `ASC` (ascending) or `DESC` (descending) |
+| **Columns**     | One or more columns (composite index)                |
+| **Where**       | Partial index condition (optional)                   |
+| **Primary Key** | Indicates this is the primary key index (read-only)  |
+
+### Index Types
+
+| Type              | Description                                        | Example Use Case                    |
+| ----------------- | -------------------------------------------------- | ----------------------------------- |
+| **Single-column** | Index on one column                                | `userId` for user lookups           |
+| **Composite**     | Index on multiple columns                          | `(userId, createdOn)` for filtering |
+| **Unique**        | Prevents duplicate values                          | Email addresses                     |
+| **Partial**       | Index only rows matching a WHERE condition         | Active records only                 |
+| **Primary Key**   | Unique identifier for each row (cannot be deleted) | `id` column                         |
+
+### Partial Index Examples
+
+Use the Where Clause field to create partial indexes:
+
+```sql
+-- Index only active users
+"isActive" = true
+
+-- Index only recent orders
+"createdOn" > '2024-01-01'
+
+-- Index non-null emails
+"email" IS NOT NULL
+```
+
+### Index Naming Convention
+
+Indexes are automatically named using this pattern:
+
+```
+{tableName}_{column1}_{column2}_[unique_]index
+```
+
+Examples:
+
+-   `user_email_unique_index`
+-   `order_userId_createdOn_index`
+
+---
+
+## Foreign Keys
+
+Foreign keys enforce referential integrity between tables.
+
+### Foreign Key Properties
+
+| Property       | Description                                                  |
+| -------------- | ------------------------------------------------------------ |
+| **Name**       | Auto-generated: `{table}_{column}_{refTable}_{refColumn}_fk` |
+| **Column**     | The column in your table (must be BIGINT/BIGSERIAL)          |
+| **Ref Table**  | The table being referenced                                   |
+| **Ref Column** | The column being referenced (typically `id`)                 |
+| **On Delete**  | Action when the referenced row is deleted                    |
+| **On Update**  | Action when the referenced row is updated                    |
+
+### Foreign Key Actions
+
+| Action        | Description                                         | Use Case                           |
+| ------------- | --------------------------------------------------- | ---------------------------------- |
+| `NO ACTION`   | Prevent delete/update if references exist (default) | Preserve data integrity            |
+| `RESTRICT`    | Like NO ACTION, but checked immediately             | Strict integrity enforcement       |
+| `CASCADE`     | Automatically delete/update all referencing rows    | Dependent data (e.g., order items) |
+| `SET NULL`    | Set the foreign key column to NULL                  | Optional relationships             |
+| `SET DEFAULT` | Set the foreign key column to its default value     | Fallback to default reference      |
+
+### Common Patterns
+
+**User → Orders (CASCADE delete)**
+
+```
+order.userId → user.id
+On Delete: CASCADE (delete orders when user is deleted)
+On Update: NO ACTION
+```
+
+**Order → OrderItems (CASCADE delete)**
+
+```
+orderItem.orderId → order.id
+On Delete: CASCADE (delete items when order is deleted)
+On Update: NO ACTION
+```
+
+**Optional Manager Reference (SET NULL)**
+
+```
+employee.managerId → employee.id
+On Delete: SET NULL (keep employee, clear manager reference)
+On Update: NO ACTION
+```
+
+---
+
+## Check Constraints
+
+Check constraints enforce custom validation rules at the database level.
+
+### Check Constraint Properties
+
+| Property  | Description                                    |
+| --------- | ---------------------------------------------- |
+| **Name**  | Unique constraint name (e.g., `order_check_1`) |
+| **Check** | SQL expression that must evaluate to true      |
+
+### Examples
+
+```sql
+-- Ensure positive prices
+"price" > 0
+
+-- Validate quantity range
+"quantity" >= 0 AND "quantity" <= 1000
+
+-- Restrict status values
+"status" IN ('pending', 'active', 'completed', 'cancelled')
+
+-- Date range validation
+"endDate" > "startDate"
+
+-- Percentage validation
+"discount" >= 0 AND "discount" <= 100
+
+-- Email format (basic)
+"email" LIKE '%@%.%'
+
+-- Compound validation
+("type" = 'premium' AND "price" > 100) OR ("type" = 'basic' AND "price" <= 100)
+```
+
+### Naming Convention
+
+Check constraints are named using this pattern:
+
+```
+{tableName}_check_{number}
+```
+
+---
+
+## Notifications
+
+Configure PostgreSQL `NOTIFY` triggers to emit real-time events when rows change. This enables event-driven architectures and real-time updates.
+
+### Notification Modes
+
+| Mode       | Description                                                        |
+| ---------- | ------------------------------------------------------------------ |
+| **None**   | No notifications (default)                                         |
+| **All**    | Notify on all INSERT, UPDATE, DELETE operations with full row data |
+| **Custom** | Notify only for specific columns                                   |
+
+### Event Types
+
+When notifications are enabled, Restura creates triggers for:
+
+| Event    | Payload Includes                                                  |
+| -------- | ----------------------------------------------------------------- |
+| `insert` | `table`, `insertedId`, `record`, `queryMetadata`                  |
+| `update` | `table`, `changedId`, `record`, `previousRecord`, `queryMetadata` |
+| `delete` | `table`, `deletedId`, `previousRecord`, `queryMetadata`           |
+
+### Listening for Events
+
+Use the EventManager in your application to handle notifications:
+
+```typescript
+import eventManager from '@restura/core';
+
+// Listen for row inserts
+eventManager.addRowInsertHandler<User>(
+	async (data, queryMetadata) => {
+		console.log('New user:', data.record);
+	},
+	{ tableName: 'user' }
+);
+
+// Listen for column updates
+eventManager.addColumnChangeHandler<Order>(
+	async (data, queryMetadata) => {
+		console.log('Order status changed:', data.record.status);
+	},
+	{ tableName: 'order', columns: ['status'] }
+);
+
+// Listen for row deletes
+eventManager.addRowDeleteHandler<User>(
+	async (data, queryMetadata) => {
+		console.log('User deleted:', data.deletedId);
+	},
+	{ tableName: 'user' }
+);
+```
+
+### Custom Column Notifications
+
+When using Custom mode, select specific columns to include in notifications. This reduces payload size and allows filtering:
+
+-   Only selected columns are included in the `record` and `previousRecord` objects
+-   Useful for large tables where you only care about specific field changes
+
+---
+
+## Permissions
+
+Restura supports both table-level and column-level access control.
+
+### Table-Level Permissions
+
+Control which users can access the entire table:
+
+| Property   | Description                          |
+| ---------- | ------------------------------------ |
+| **Roles**  | User roles that can query this table |
+| **Scopes** | OAuth-style scopes for table access  |
+
+If a table has roles/scopes defined:
+
+-   Users without the required role/scope cannot query the table
+-   An error is thrown: "You do not have permission to access this table"
+
+If a table has no roles/scopes:
+
+-   The table is considered public
+-   Any authenticated (or unauthenticated) user can access it
+
+### Column-Level Permissions
+
+Control which users can see specific columns:
+
+| Property   | Description                                      |
+| ---------- | ------------------------------------------------ |
+| **Roles**  | User roles that can see this column in responses |
+| **Scopes** | OAuth-style scopes for column access             |
+
+Column permissions work as follows:
+
+-   Columns with roles/scopes are only included in responses if the user has the required access
+-   Columns without roles/scopes are included for all users
+-   If a user doesn't have access to any columns, the query fails
+
+### Permission Examples
+
+**Table-level: Admin-only table**
+
+```
+roles: ['ADMIN']
+scopes: []
+```
+
+**Column-level: Hide sensitive data**
+
+```
+Column: socialSecurityNumber
+roles: ['ADMIN', 'HR']
+scopes: []
+```
+
+**Scope-based access**
+
+```
+Table: user
+scopes: ['read:users']
+
+Column: email
+scopes: ['read:users:email']
+```
+
+---
+
+## Type Mappings
+
+Restura automatically maps database types to TypeScript types:
+
+| Database Type                 | TypeScript Type                        |
+| ----------------------------- | -------------------------------------- |
+| BOOLEAN, TINYINT(1)           | `boolean`                              |
+| SMALLINT, INTEGER, BIGINT     | `number`                               |
+| SERIAL, BIGSERIAL             | `number`                               |
+| REAL, DOUBLE PRECISION, FLOAT | `number`                               |
+| DECIMAL, NUMERIC              | `string` (for precision)               |
+| CHAR, VARCHAR, TEXT           | `string`                               |
+| DATE, TIME, TIMESTAMP         | `string`                               |
+| JSON, JSONB                   | `object` (or custom type if specified) |
+| ENUM                          | String union type                      |
+| BYTEA, BLOB                   | `string`                               |
+
+---
+
+## Database Page UI
+
+The Database page in Restura UI provides tools to manage your schema.
+
+### Section Toggles
+
+Toggle visibility of different sections across all tables:
+
+| Toggle            | Shows/Hides                 |
+| ----------------- | --------------------------- |
+| **Columns**       | Column definitions          |
+| **Indexes**       | Index configurations        |
+| **Foreign Keys**  | Foreign key relationships   |
+| **Checks**        | Check constraints           |
+| **Notifications** | Notification configurations |
+
+### Search Functionality
+
+The search bar supports multiple search modes:
+
+| Search Type | Example  | Description                               |
+| ----------- | -------- | ----------------------------------------- |
+| Table name  | `user`   | Filters tables containing "user"          |
+| Exact match | `"user"` | Shows only the table named exactly "user" |
+| Column type | `BIGINT` | Shows tables with BIGINT columns          |
+
+### Visual Indicators
+
+| Indicator      | Meaning                                   |
+| -------------- | ----------------------------------------- |
+| 🔑 Key icon    | Primary key column                        |
+| Red "MISSING!" | Required field not configured             |
+| Disabled edit  | Field cannot be modified (e.g., PK index) |
+
+---
+
+## Best Practices
+
+### Naming Conventions
+
+-   Use `camelCase` for table and column names
+-   Use descriptive names that indicate purpose
+-   Use `Id` suffix for foreign keys (enables auto-detection)
+-   Use `On` suffix for timestamp fields (enables auto-configuration)
+-   Use `is` or `has` prefix for boolean fields
+
+### Performance
+
+-   Add indexes for columns used in WHERE clauses
+-   Add indexes for foreign key columns
+-   Use composite indexes for multi-column queries
+-   Consider partial indexes for frequently filtered subsets
+
+### Data Integrity
+
+-   Use foreign keys to enforce relationships
+-   Add check constraints for business rules
+-   Set appropriate NOT NULL constraints
+-   Use ENUM or check constraints for status fields
+
+### Security
+
+-   Configure table-level permissions for sensitive tables
+-   Use column-level permissions for PII (email, phone, SSN)
+-   Grant minimum necessary permissions
+-   Use scopes for fine-grained API access control

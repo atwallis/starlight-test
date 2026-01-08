@@ -3,7 +3,9 @@ title: Filter
 description: Filter parameter in Restura
 ---
 
-Complete reference for the `filter` query parameter syntax used in paged routes. The filter parameter enables dynamic client-side filtering of paginated results.
+import { Aside } from '@astrojs/starlight/components';
+
+The filter parameter enables dynamic server-side filtering of paginated results.
 
 ## Quick Reference
 
@@ -50,9 +52,9 @@ Operators are **case-insensitive**: `GT`, `Gt`, `gt` all work identically.
 | `table.column`           | Table-qualified column | `(user.email,sw,admin)`      | `"user"."email"::text ILIKE 'admin%'`  |
 | `table.column.jsonField` | JSON field access      | `(user.metadata.role,admin)` | `"user"."metadata"->>'role' = 'admin'` |
 
-> **Limit**: Column paths cannot exceed 3 parts. `a.b.c.d` is rejected.
-
----
+<Aside type="note">
+Column paths cannot exceed 3 parts. `a.b.c.d` is rejected.
+</Aside>
 
 ### Escaping Special Characters
 
@@ -64,24 +66,74 @@ Operators are **case-insensitive**: `GT`, `Gt`, `gt` all work identically.
 
 Spaces do **not** require escaping:
 
+**Filter:**
+
 ```
-(name,has,John Doe)    →    "name"::text ILIKE '%John Doe%'
+(name,has,John Doe)
+```
+
+**SQL:**
+
+```sql
+"name"::text ILIKE '%John Doe%'
 ```
 
 ### IN Operator Values
 
 Use pipes (`|`) to separate multiple values:
 
+**Filter:**
+
 ```
-(id,in,1|2|3)                           →  "id" IN (1, 2, 3)
-(status,in,ACTIVE|PENDING|PROCESSING)   →  "status" IN ('ACTIVE', 'PENDING', 'PROCESSING')
-(status,in,In Progress|On Hold)         →  "status" IN ('In Progress', 'On Hold')
+(id,in,1|2|3)
+```
+
+**SQL:**
+
+```sql
+"id" IN (1, 2, 3)
+```
+
+---
+
+**Filter:**
+
+```
+(status,in,ACTIVE|PENDING|PROCESSING)
+```
+
+**SQL:**
+
+```sql
+"status" IN ('ACTIVE', 'PENDING', 'PROCESSING')
+```
+
+---
+
+**Filter:**
+
+```
+(status,in,In Progress|On Hold)
+```
+
+**SQL:**
+
+```sql
+"status" IN ('In Progress', 'On Hold')
 ```
 
 Escape literal pipes within values:
 
+**Filter:**
+
 ```
-(tags,in,red\|green|blue|yellow)        →  "tags" IN ('red|green', 'blue', 'yellow')
+(tags,in,red\|green|blue|yellow)
+```
+
+**SQL:**
+
+```sql
+"tags" IN ('red|green', 'blue', 'yellow')
 ```
 
 ### Logical Operators
@@ -95,56 +147,236 @@ Operators are **case-insensitive**: `AND`, `And`, `and` all work identically.
 
 #### Chaining Multiple Conditions
 
+**Filter:**
+
 ```
-(a,1)and(b,2)and(c,3)     →  "a" = 1 AND "b" = 2 AND "c" = 3
-(a,1)or(b,2)or(c,3)       →  "a" = 1 OR "b" = 2 OR "c" = 3
-(a,1)and(b,2)or(c,3)      →  "a" = 1 AND "b" = 2 OR "c" = 3
+(a,1)and(b,2)and(c,3)
+```
+
+**SQL:**
+
+```sql
+"a" = 1 AND "b" = 2 AND "c" = 3
+```
+
+---
+
+**Filter:**
+
+```
+(a,1)or(b,2)or(c,3)
+```
+
+**SQL:**
+
+```sql
+"a" = 1 OR "b" = 2 OR "c" = 3
+```
+
+---
+
+**Filter:**
+
+```
+(a,1)and(b,2)or(c,3)
+```
+
+**SQL:**
+
+```sql
+"a" = 1 AND "b" = 2 OR "c" = 3
 ```
 
 ### Negation
 
 Prefix expressions with `!` to negate:
 
+**Filter:**
+
 ```
-!(status,DELETED)             →  NOT ("status" = 'DELETED')
-!(a,1)and(b,2)                →  NOT ("a" = 1) AND ("b" = 2)
-(a,1)and!(b,2)                →  ("a" = 1) AND NOT ("b" = 2)
-!(a,1)and!(b,2)               →  NOT ("a" = 1) AND NOT ("b" = 2)
+!(status,DELETED)
+```
+
+**SQL:**
+
+```sql
+NOT ("status" = 'DELETED')
+```
+
+---
+
+**Filter:**
+
+```
+!(a,1)and(b,2)
+```
+
+**SQL:**
+
+```sql
+NOT ("a" = 1) AND ("b" = 2)
+```
+
+---
+
+**Filter:**
+
+```
+(a,1)and!(b,2)
+```
+
+**SQL:**
+
+```sql
+("a" = 1) AND NOT ("b" = 2)
+```
+
+---
+
+**Filter:**
+
+```
+!(a,1)and!(b,2)
+```
+
+**SQL:**
+
+```sql
+NOT ("a" = 1) AND NOT ("b" = 2)
 ```
 
 ### Grouping
 
 Use parentheses to control precedence:
 
+**Filter:**
+
 ```
-((a,1)or(b,2))                          →  (("a" = 1) OR ("b" = 2))
-((a,1)or(b,2))and((c,3)or(d,4))         →  (("a" = 1) OR ("b" = 2)) AND (("c" = 3) OR ("d" = 4))
+((a,1)or(b,2))
+```
+
+**SQL:**
+
+```sql
+(("a" = 1) OR ("b" = 2))
+```
+
+---
+
+**Filter:**
+
+```
+((a,1)or(b,2))and((c,3)or(d,4))
+```
+
+**SQL:**
+
+```sql
+(("a" = 1) OR ("b" = 2)) AND (("c" = 3) OR ("d" = 4))
 ```
 
 Negate entire groups:
 
+**Filter:**
+
 ```
-!((a,1)or(b,2))                         →  NOT (("a" = 1) OR ("b" = 2))
-((a,1)or(b,2))and!((c,3)or(d,4))        →  (("a" = 1) OR ("b" = 2)) AND NOT (("c" = 3) OR ("d" = 4))
+!((a,1)or(b,2))
 ```
 
-> **Limit**: Maximum nesting depth is 1. Expressions like `(((a,1)or(b,2))and(c,3))` are rejected.
+**SQL:**
+
+```sql
+NOT (("a" = 1) OR ("b" = 2))
+```
+
+---
+
+**Filter:**
+
+```
+((a,1)or(b,2))and!((c,3)or(d,4))
+```
+
+**SQL:**
+
+```sql
+(("a" = 1) OR ("b" = 2)) AND NOT (("c" = 3) OR ("d" = 4))
+```
+
+<Aside type="note">
+Maximum nesting depth is 1. Expressions like `(((a,1)or(b,2))and(c,3))` are rejected.
+</Aside>
 
 ### Whitespace
 
 Whitespace is allowed around logical operators and after commas:
 
+**Filter:**
+
 ```
-(a,1) and (b,2)           →  "a" = 1 AND "b" = 2
-(status, ACTIVE)          →  "status" = 'ACTIVE'
-(price, gt, 100)          →  "price" > 100
+(a,1) and (b,2)
+```
+
+**SQL:**
+
+```sql
+"a" = 1 AND "b" = 2
+```
+
+---
+
+**Filter:**
+
+```
+(status, ACTIVE)
+```
+
+**SQL:**
+
+```sql
+"status" = 'ACTIVE'
+```
+
+---
+
+**Filter:**
+
+```
+(price, gt, 100)
+```
+
+**SQL:**
+
+```sql
+"price" > 100
 ```
 
 Whitespace within values is preserved:
 
+**Filter:**
+
 ```
-(name,John Doe)           →  "name" = 'John Doe'
-(title,has,hello world)   →  "title"::text ILIKE '%hello world%'
+(name,John Doe)
+```
+
+**SQL:**
+
+```sql
+"name" = 'John Doe'
+```
+
+---
+
+**Filter:**
+
+```
+(title,has,hello world)
+```
+
+**SQL:**
+
+```sql
+"title"::text ILIKE '%hello world%'
 ```
 
 ## Old Syntax (Deprecated)
@@ -178,33 +410,114 @@ When `type` is omitted:
 
 ### Old Syntax Column Paths
 
+**Filter:**
+
 ```
-(column:id,value:123,type:exact)                      →  "id" = 123
-(column:orderV2.id,value:215)                         →  "orderV2"."id" = 215
-(column:order.billingAddress.zip,value:47,type:contains)  →  "order"."billingAddress"->>'zip'::text ILIKE '%47%'
+(column:id,value:123,type:exact)
+```
+
+**SQL:**
+
+```sql
+"id" = 123
+```
+
+---
+
+**Filter:**
+
+```
+(column:orderV2.id,value:215)
+```
+
+**SQL:**
+
+```sql
+"orderV2"."id" = 215
+```
+
+---
+
+**Filter:**
+
+```
+(column:order.billingAddress.zip,value:47,type:contains)
+```
+
+**SQL:**
+
+```sql
+"order"."billingAddress"->>'zip'::text ILIKE '%47%'
 ```
 
 ### Old Syntax Logical Operators
 
+**Filter:**
+
 ```
 (column:id,value:251)or(column:id,value:278)
-→  ("id" = 251) or ("id" = 278)
+```
 
+**SQL:**
+
+```sql
+("id" = 251) or ("id" = 278)
+```
+
+---
+
+**Filter:**
+
+```
 (column:id,value:215)AND(column:totalPriceCents,value:3069,type:greaterThan)
-→  ("id" = 215) AND ("totalPriceCents" > 3069)
+```
+
+**SQL:**
+
+```sql
+("id" = 215) AND ("totalPriceCents" > 3069)
 ```
 
 ### Old Syntax Grouping and Negation
 
+**Filter:**
+
 ```
 ((column:id,value:251)or(column:id,value:278))AND(column:status,value:ACTIVE,type:exact)
-→  (("id" = 251) or ("id" = 278)) AND ("status" = 'ACTIVE')
+```
 
+**SQL:**
+
+```sql
+(("id" = 251) or ("id" = 278)) AND ("status" = 'ACTIVE')
+```
+
+---
+
+**Filter:**
+
+```
 !(column:userId,value:15234,type:exact)
-→  NOT ("userId" = 15234)
+```
 
+**SQL:**
+
+```sql
+NOT ("userId" = 15234)
+```
+
+---
+
+**Filter:**
+
+```
 !(column:id,value:4504055,type:contains)and!(column:name,value:jim,type:endsWith)
-→  NOT ("id"::text ILIKE '%4504055%') and NOT ("name"::text ILIKE '%jim')
+```
+
+**SQL:**
+
+```sql
+NOT ("id"::text ILIKE '%4504055%') and NOT ("name"::text ILIKE '%jim')
 ```
 
 ## Syntax Comparison
@@ -246,11 +559,58 @@ The filter parser is designed to prevent SQL injection:
 
 Examples of safely escaped input:
 
+**Filter:**
+
 ```
-(name,O'Brien)                          →  "name" = 'O''Brien'
-(password,' OR '1'='1)                  →  "password" = ''' OR ''1''=''1'
-(id,1; DROP TABLE users; --)            →  "id" = '1; DROP TABLE users; --'
-(path,C:\\Windows\\System32)            →  "path" = E'C:\\Windows\\System32'
+(name,O'Brien)
+```
+
+**SQL:**
+
+```sql
+"name" = 'O''Brien'
+```
+
+---
+
+**Filter:**
+
+```
+(password,' OR '1'='1)
+```
+
+**SQL:**
+
+```sql
+"password" = ''' OR ''1''=''1'
+```
+
+---
+
+**Filter:**
+
+```
+(id,1; DROP TABLE users; --)
+```
+
+**SQL:**
+
+```sql
+"id" = '1; DROP TABLE users; --'
+```
+
+---
+
+**Filter:**
+
+```
+(path,C:\\Windows\\System32)
+```
+
+**SQL:**
+
+```sql
+"path" = E'C:\\Windows\\System32'
 ```
 
 ## Error Cases

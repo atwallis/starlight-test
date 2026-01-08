@@ -2,32 +2,12 @@
 title: Endpoints
 ---
 
-Complete reference for configuring API endpoints, routes, parameters, and responses in Restura.
+In Restura, an **endpoint** is a group of related routes sharing the same base URL (e.g., `/api/v1/users`). Each endpoint contains one or more **routes**—individual API paths that handle requests for specific operations.
 
----
+Routes come in two flavors:
 
-## Terminology
-
-### Core Concepts
-
-| Term                  | Description                                                                         |
-| --------------------- | ----------------------------------------------------------------------------------- |
-| **Endpoint**          | A group of related routes sharing the same base URL (e.g., `/api/v1/users`)         |
-| **Base URL**          | The common URL prefix shared by all routes within an endpoint group                 |
-| **Route**             | A single API path that handles requests for a specific operation                    |
-| **Standard route**    | A route that automatically generates SQL queries based on your schema configuration |
-| **Custom route**      | A route that delegates to your own handler code instead of auto-generating SQL      |
-| **Standard endpoint** | An endpoint containing standard routes that leverage automatic SQL generation       |
-| **Custom endpoint**   | An endpoint containing custom routes with hand-written business logic               |
-
-### HTTP & Paths
-
-| Term               | Description                                                                                   |
-| ------------------ | --------------------------------------------------------------------------------------------- |
-| **HTTP method**    | The request type: `GET` (read), `POST` (create), `PUT`/`PATCH` (update), or `DELETE` (remove) |
-| **Path**           | The URL pattern for a route, which can include dynamic segments (e.g., `/users/:id`)          |
-| **Path parameter** | A dynamic segment in a route path like `:id` that captures values from the URL                |
-| **Deprecation**    | A route property indicating the endpoint will be removed, with a date and message             |
+-   **Standard routes** automatically generate SQL queries based on your schema configuration
+-   **Custom routes** delegate to your own TypeScript handler code for complex business logic
 
 ---
 
@@ -77,6 +57,25 @@ Custom routes delegate to your TypeScript handler code. Use these when you need:
 | **Method**      | HTTP method (`GET`, `POST`, `PUT`, `PATCH`, `DELETE`) | Yes      |
 | **Path**        | URL path pattern (e.g., `/user/by-name`)              | Yes      |
 
+### HTTP Methods
+
+| Method   | Purpose        | Has Request Body | Typical Route Types     |
+| -------- | -------------- | ---------------- | ----------------------- |
+| `GET`    | Read data      | No               | `ONE`, `ARRAY`, `PAGED` |
+| `POST`   | Create data    | Yes              | `ONE`, `CUSTOM_ONE`     |
+| `PUT`    | Replace data   | Yes              | `ONE`, `CUSTOM_ONE`     |
+| `PATCH`  | Partial update | Yes              | `ONE`, `CUSTOM_ONE`     |
+| `DELETE` | Remove data    | No               | `ONE`, `CUSTOM_ONE`     |
+
+### Paths
+
+The **path** is the URL pattern for a route. Paths can include dynamic segments called **path parameters** that capture values from the URL:
+
+| Pattern                          | Example URL          | Captured Value               |
+| -------------------------------- | -------------------- | ---------------------------- |
+| `/users/:id`                     | `/users/42`          | `id = 42`                    |
+| `/orders/:orderId/items/:itemId` | `/orders/5/items/10` | `orderId = 5`, `itemId = 10` |
+
 ### Permission Properties
 
 | Property   | Description                                      |
@@ -110,9 +109,11 @@ Parameters define the inputs your route accepts from callers.
 
 ### Parameter Sources
 
--   **Query string** – Parameters passed in the URL (e.g., `?name=John`)
--   **Request body** – Parameters sent as JSON in POST/PUT/PATCH requests
--   **Path parameters** – Dynamic segments captured from the URL (e.g., `:id`)
+| Source              | Description                                        | Example              |
+| ------------------- | -------------------------------------------------- | -------------------- |
+| **Query string**    | Parameters passed in the URL                       | `?name=John`         |
+| **Request body**    | Parameters sent as JSON in POST/PUT/PATCH requests | `{ "name": "John" }` |
+| **Path parameters** | Dynamic segments captured from the URL             | `/users/:id`         |
 
 ### Parameter Prefixes
 
@@ -491,12 +492,17 @@ Need custom logic?
 | `$`    | Local parameter  | Request query/body         | `$firstName` |
 | `#`    | Global parameter | Authenticated user context | `#userId`    |
 
-### HTTP Method Guidelines
+### Glossary
 
-| Method   | Purpose        | Has Request Body | Typical Route Types     |
-| -------- | -------------- | ---------------- | ----------------------- |
-| `GET`    | Read data      | No               | `ONE`, `ARRAY`, `PAGED` |
-| `POST`   | Create data    | Yes              | `ONE`, `CUSTOM_ONE`     |
-| `PUT`    | Replace data   | Yes              | `ONE`, `CUSTOM_ONE`     |
-| `PATCH`  | Partial update | Yes              | `ONE`, `CUSTOM_ONE`     |
-| `DELETE` | Remove data    | No               | `ONE`, `CUSTOM_ONE`     |
+| Term                  | Description                                                                       |
+| --------------------- | --------------------------------------------------------------------------------- |
+| **Endpoint**          | A group of related routes sharing the same base URL                               |
+| **Route**             | A single API path that handles requests for a specific operation                  |
+| **Standard route**    | A route that automatically generates SQL queries based on schema configuration    |
+| **Custom route**      | A route that delegates to your own handler code instead of auto-generating SQL    |
+| **Path parameter**    | A dynamic segment in a route path (e.g., `:id`) that captures values from the URL |
+| **Local parameter**   | A request parameter specific to a route, referenced with `$` prefix               |
+| **Global parameter**  | A value from the authenticated user context, referenced with `#` prefix           |
+| **Selector**          | A column reference that maps a database column to a response property             |
+| **Response property** | A field returned in the API response                                              |
+| **Deprecation**       | A route property indicating the endpoint will be removed, with a date and message |

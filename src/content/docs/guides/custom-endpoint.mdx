@@ -2,6 +2,8 @@
 title: Create a Custom Endpoint
 ---
 
+import { Aside } from '@astrojs/starlight/components';
+
 A quick guide to creating an endpoint with your own TypeScript implementation.
 
 Use custom endpoints when you need logic beyond simple CRUD—like authentication, file uploads, or external API calls.
@@ -40,7 +42,9 @@ Type each parameter name, click **Add**, then configure:
 -   Check **Required** if mandatory
 -   Set the validator type (`string`, `number`, `boolean`, etc.)
 
-> **Alternative:** Uncheck "Standard Request" to use a custom request type instead.
+<Aside type="note">
+**Alternative:** Uncheck "Standard Request" to use a custom request type instead.
+</Aside>
 
 ## Step 4: Set the Response Type
 
