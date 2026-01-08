@@ -41,6 +41,10 @@ export default defineConfig({
 				{
 					label: 'Reference',
 					autogenerate: { directory: 'reference' }
+				},
+				{
+					label: 'Contributing',
+					autogenerate: { directory: 'contributing' }
 				}
 			],
 			customCss: ['./src/styles/global.css'],
