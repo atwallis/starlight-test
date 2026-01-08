@@ -138,25 +138,20 @@ Then run the following command to start the local PostgreSQL database:
 Create a `schema.sql` file with the following content:
 
 export const schemaSqlCode = `
-CREATE TABLE users (
-create table public."user"
-(
-    id           bigserial
-        primary key,
-    "createdOn"  timestamp with time zone default now() not null,
-    "modifiedOn" timestamp with time zone default now() not null,
-    "firstName"  varchar(150)                           not null,
-    "lastName"   varchar(150)                           not null,
-    email        varchar(255)                           not null,
-    role         text                                   not null
-        constraint user_role_check
-            check (role = ANY (ARRAY ['ADMIN'::text, 'USER'::text]))
+CREATE TABLE public."user" (
+    id           bigserial PRIMARY KEY,
+    "createdOn"  timestamptz NOT NULL DEFAULT now(),
+    "modifiedOn" timestamptz NOT NULL DEFAULT now(),
+    "firstName"  varchar(150) NOT NULL,
+    "lastName"   varchar(150) NOT NULL,
+    email        varchar(255) NOT NULL,
+    role         text NOT NULL
+        CONSTRAINT user_role_check
+            CHECK (role = ANY (ARRAY['ADMIN', 'USER']))
 );
 
-create unique index user_email_unique_index
-    on public."user" (email);
-);
-
+CREATE UNIQUE INDEX user_email_unique_index
+    ON public."user" (email);
 
 INSERT INTO public."user" (
     "firstName",
@@ -164,12 +159,11 @@ INSERT INTO public."user" (
     email,
     role
 ) VALUES (
-    'Restura',
-    'Test',
-    'test@restura.com',
+    'System',
+    'User',
+    'system@localhost',
     'ADMIN'
 );
-
 `;
 
 <Code code={schemaSqlCode} lang="sql" title="schema.sql"/>
@@ -450,15 +444,14 @@ The Restura UI connects to the Restura Engine on port 3001 by default. If you ca
 
 ## Explore the Restura UI
 
-When you first login, you will be navigated to the "Database" tab. Here you can view the database tables that are managed by Restura.
+When you login, you will be navigated to the "Database" tab. Here you can view the database tables that are managed by Restura.
 
-To view endpoints, click on the "Endpoints" tab. Here you can view the endpoints that are managed by Restura.
+To view endpoints, click on the "API" tab. Here you can view the endpoints that are managed by Restura.
 
 Changes made to the database tables or endpoints update the `restura.schema.json` file and the Restura Engine will automatically restart to apply the changes.
 
-## Next steps
-- Add a database table
-- Create a standard endpoint
-- Create a custom endpoint
-- Add an authentication handler with roles
-- Add an authentication handler with scopes
+## Next Steps
+- [Create a new database table](../guides/database-table)
+- [Create a standard endpoint](../guides/standard-endpoint)
+- [Create a custom endpoint](../guides/custom-endpoint)
+- [Add a custom authentication handler](../guides/authentication-handler)
