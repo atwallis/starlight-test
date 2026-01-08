@@ -4,9 +4,7 @@ title: Create a Custom Endpoint
 
 import { Aside } from '@astrojs/starlight/components';
 
-A quick guide to creating an endpoint with your own TypeScript implementation.
-
-Use custom endpoints when you need logic beyond simple CRUD—like authentication, file uploads, or external API calls.
+This guide walks you through creating an endpoint with your own TypeScript implementation. Use custom endpoints when you need logic beyond simple CRUD—like authentication, file uploads, or external API calls.
 
 ## Step 1: Create a Custom Type (Optional)
 
@@ -99,22 +97,25 @@ export default class UserApiV1 {
 
 ## Step 8: Test Your Endpoint
 
-```
-POST /v1/user/login
-Content-Type: application/json
+**Example request:**
 
+```bash
+curl -X POST "http://localhost:3001/v1/user/login" \
+  -H "Content-Type: application/json" \
+  -d '{"username": "john", "password": "secret"}'
+```
+
+**Example response:**
+
+```json
 {
-  "username": "john",
-  "password": "secret"
+  "data": {
+    "token": "abc123",
+    "tokenExp": "2025-01-01T00:00:00.000Z",
+    "refreshToken": "xyz789",
+    "refreshTokenExp": "2025-06-01T00:00:00.000Z"
+  }
 }
 ```
-
-## Summary
-
-You created a custom endpoint with:
-
--   ✅ Custom response type
--   ✅ Request parameter validation
--   ✅ TypeScript handler implementation
 
 For more details on types, error handling, and file uploads, see the [Endpoints Reference](../../reference/endpoints).

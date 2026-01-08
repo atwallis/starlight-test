@@ -4,19 +4,7 @@ title: Create a Standard Endpoint
 
 import { Aside } from '@astrojs/starlight/components';
 
-Build a GET endpoint that fetches data from a table, filters by a request parameter, and joins to a related table.
-
-## What You'll Build
-
-A read endpoint that:
-
--   Accepts a filter parameter from the request
--   Queries a base table with an optional join
--   Returns selected fields from one or more tables
-
-<Aside type="tip" title="Running Example">
-Throughout this guide, we'll show a concrete example: fetching a user by first name with their company info. Adapt the values to your own tables.
-</Aside>
+This guide walks you through building a GET endpoint that fetches data from a table, filters by a request parameter, and joins to a related table.
 
 ---
 
@@ -181,14 +169,14 @@ For joined tables, columns are available under the join alias:
 
 Call your endpoint with the required parameters:
 
-```
-GET /v1/{your-path}?{parameter}={value}
+```bash
+curl "http://localhost:3001/v1/{your-path}?{parameter}={value}"
 ```
 
-<Aside>
 **Example request:**
-```
-GET /v1/user/by-name?firstName=John
+
+```bash
+curl "http://localhost:3001/v1/user/by-name?firstName=John"
 ```
 
 **Example response:**
@@ -203,18 +191,5 @@ GET /v1/user/by-name?firstName=John
 	}
 }
 ```
-
-</Aside>
-
----
-
-## Summary
-
-You created a standard endpoint with:
-
--   ✅ Request parameters with validation
--   ✅ A join to include related data (optional)
--   ✅ A where clause to filter results
--   ✅ A custom response shape
 
 For more configuration options, see the [Endpoints Reference](../../reference/endpoints).
