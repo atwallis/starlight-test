@@ -52,6 +52,38 @@ bun add express`;
   </TabItem>
 </Tabs>
 
+### Install TypeScript if desired
+
+If you want to use TypeScript, you can install it by running the following commands:
+
+export const installTypescriptNpmCode = `
+npm install -D typescript
+npx tsc --init`;
+export const installTypescriptPnpmCode = `
+pnpm add -D typescript
+pnpx tsc --init`;
+export const installTypescriptYarnCode = `
+yarn add -D typescript
+yarn tsc --init`;
+
+<Tabs>
+  <TabItem label="npm">
+    <Code code={installTypescriptNpmCode} lang="bash"/>
+  </TabItem>
+  <TabItem label="pnpm">
+    <Code code={installTypescriptPnpmCode} lang="bash"/>
+  </TabItem>
+  <TabItem label="yarn">
+    <Code code={installTypescriptYarnCode} lang="bash"/>
+  </TabItem>
+</Tabs>
+
+This will create a `tsconfig.json` file in the root of your project.
+
+<Aside type="note">
+Bun already includes TypeScript, so you don't need to install it.
+</Aside>
+
 ### Add an entry file
 
 Create a new file called `server.ts`or `server.js` in the root of your project.

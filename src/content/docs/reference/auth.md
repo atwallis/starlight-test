@@ -1,5 +1,5 @@
 ---
-title: Authenication & Authorization
+title: Authentication & Authorization
 ---
 
 -   **Role** – A permission level assigned to users that controls access to routes and data.
