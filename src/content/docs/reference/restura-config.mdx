@@ -119,16 +119,16 @@ logger: {
 
 ### Log Levels
 
-From least to most severe:
+From most to least severe:
 
 | Level             | Use Case                            |
 | ----------------- | ----------------------------------- |
-| `trace` / `silly` | Very verbose tracing                |
-| `debug`           | Detailed debugging info             |
-| `info`            | General operational messages        |
-| `warn`            | Potential problems                  |
-| `error`           | Errors that need attention          |
 | `fatal`           | Unrecoverable errors, app must exit |
+| `error`           | Errors that need attention          |
+| `warn`            | Potential problems                  |
+| `info`            | General operational messages        |
+| `debug`           | Detailed debugging info             |
+| `trace` / `silly` | Very verbose tracing                |
 
 Set to `debug` or `silly` during development, `info` or `warn` in production.
 
