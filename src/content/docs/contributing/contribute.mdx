@@ -35,20 +35,16 @@ export const cloneSshCode = `git clone git@github.com:redsky-engineering/restura
 Navigate to the `restura-ui` directory and run the following command to start the Restura UI:
 
 export const startUiNpmCode = `cd restura
-npm install
-npm run build`;
+npm install`;
 
 export const startUiPnpmCode = `cd restura
-pnpm install
-pnpm build`;
+pnpm install`;
 
 export const startUiYarnCode = `cd restura
-yarn install
-yarn build`;
+yarn install`;
 
 export const startUiBunCode = `cd restura
-bun install
-bun run build`;
+bun install`;
 
 <Tabs>
   <TabItem label="npm">
@@ -64,6 +60,46 @@ bun run build`;
     <Code code={startUiBunCode} lang="bash"/>
   </TabItem>
 </Tabs>
+
+### Repository Structure
+
+import { FileTree } from '@astrojs/starlight/components';
+
+<FileTree>
+
+- packages
+  - core # @restura/core - Restura Engine
+    - src
+      - ...
+    - package.json
+    - tsconfig.json
+  - internal # @restura/internal - Shared utilities
+    - src
+      - ...
+    - package.json
+    - tsconfig.json
+- apps
+  - restura-express # Test application that loads the Restura Engine
+    - migrations
+      - schema.sql # SQL schema file needed for tests
+      - data.sql # SQL data file needed for tests
+    - src
+      - ...
+    - docker-compose.local.yaml
+    - package.json
+    - tsconfig.json
+  - restura-ui # Visual editor
+    - src
+      - ...
+    - package.json
+    - tsconfig.json
+- docs # Documentation website
+  - src
+    - ...
+  - package.json
+  - tsconfig.json
+
+</FileTree>
 
 ## Database Setup
 
@@ -132,64 +168,19 @@ When contributing to `@restura/core` (`packages/core/`):
 
 1. **Make your changes** in `packages/core/src/`
 
-2. **Rebuild the packages:**
-   ```bash
-   pnpm build
-   ```
-
-3. **Restart the Express app** to test your changes:
+2. **Restart the Express app** to test your changes:
    ```bash
    pnpm express:dev
    ```
 
 ### Editing the UI
 
-To work on the schema editor UI (`apps/restura-ui/`):
+To work on the visual editor (`apps/restura-ui/`):
 
 ```bash
 # Start the Vite dev server
 pnpm ui:start
 ```
-
-### Project Structure
-
-import { FileTree } from '@astrojs/starlight/components';
-
-<FileTree>
-
-- packages
-  - core # @restura/core - Restura Engine
-    - src
-      - ...
-    - package.json
-    - tsconfig.json
-  - internal # @restura/internal - Shared utilities
-    - src
-      - ...
-    - package.json
-    - tsconfig.json
-- apps
-  - restura-express # Test application that loads the Restura Engine
-    - migrations
-      - schema.sql # SQL schema file needed for tests
-      - data.sql # SQL data file needed for tests
-    - src
-      - ...
-    - docker-compose.local.yaml
-    - package.json
-    - tsconfig.json
-  - restura-ui # Visual editor
-    - src
-      - ...
-    - package.json
-    - tsconfig.json
-- docs # Documentation website
-  - src
-    - ...
-  - package.json
-  - tsconfig.json
-
-</FileTree>
 
 ## Running Tests
 
@@ -253,9 +244,9 @@ pnpm test
 ## Code Style
 
 This project uses:
-- **ESLint** for code linting
-- **Prettier** for code formatting
-- **Husky** with **lint-staged** for pre-commit hooks
+- **[ESLint](https://eslint.org/)** for code linting
+- **[Prettier](https://prettier.io/)** for code formatting
+- **[Husky](https://typicode.github.io/husky/)** with **[lint-staged](https://github.com/lint-staged/lint-staged)** for pre-commit hooks
 
 Prettier runs automatically on staged files when you commit. To manually format:
 
