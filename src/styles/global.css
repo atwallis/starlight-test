@@ -6,20 +6,4 @@
 
 /* Optional: customize theme */
 @theme {
-  --font-sans: "Inter", system-ui, sans-serif;
-  --color-accent: oklch(68% 0.15 237);
-  /* Generated accent color palettes. */
-  --color-accent-200: #fab4aa;
-  --color-accent-600: #cb000b;
-  --color-accent-900: #630505;
-  --color-accent-950: #440e0a;
-  /* Generated gray color palettes. */
-  --color-gray-100: #f9f5f5;
-  --color-gray-200: #f2ecec;
-  --color-gray-300: #c8c0c0;
-  --color-gray-400: #968887;
-  --color-gray-500: #625454;
-  --color-gray-700: #413535;
-  --color-gray-800: #2f2323;
-  --color-gray-900: #1c1717;
 }

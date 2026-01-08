@@ -1,9 +1,9 @@
 // @ts-check
 import starlight from '@astrojs/starlight';
+import svelte from '@astrojs/svelte';
 import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'astro/config';
-
-import svelte from '@astrojs/svelte';
+import starlightThemeGalaxy from 'starlight-theme-galaxy';
 
 // https://astro.build/config
 export default defineConfig({
@@ -40,7 +40,8 @@ export default defineConfig({
 					autogenerate: { directory: 'reference' }
 				}
 			],
-			customCss: ['./src/styles/global.css']
+			customCss: ['./src/styles/global.css'],
+			plugins: [starlightThemeGalaxy()]
 		}),
 		svelte()
 	],
