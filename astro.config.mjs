@@ -21,6 +21,7 @@ export default defineConfig({
 					label: 'Start Here',
 					items: [
 						{ label: 'Getting Started', slug: 'getting-started' },
+						{ label: 'Start the Visual Editor', slug: 'visual-editor' },
 						{ label: 'FAQ', slug: 'faq' }
 					]
 				},

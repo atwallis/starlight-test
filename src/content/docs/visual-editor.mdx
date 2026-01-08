@@ -1,0 +1,94 @@
+---
+title: Start the Visual Editor
+---
+
+import { Aside, Code, TabItem, Tabs } from '@astrojs/starlight/components';
+
+The visual editor is a companion application to the Restura Engine that allows you to visually create and modify the database tables and endpoints found in the `restura.schema.json` file.
+
+## Run the Restura UI
+
+Currently, there is no standalone application binary for the Restura UI. You will need to download and run the application locally.
+
+Start by cloning the repository:
+
+export const resturaCloneSSHCode = `
+https://github.com/redsky-engineering/restura.git
+`;
+
+export const resturaCloneHTTPSCode = `
+git@github.com:redsky-engineering/restura.git
+`;
+
+<Tabs>
+  <TabItem label="HTTPS">
+    <Code code={resturaCloneHTTPSCode} lang="bash"/>
+  </TabItem>
+  <TabItem label="SSH">
+    <Code code={resturaCloneSSHCode} lang="bash"/>
+  </TabItem>
+</Tabs>
+
+Navigate to the `restura-ui` directory and run the following command to start the Restura UI:
+
+
+export const resturaUiNpmCode = `cd apps/restura-ui
+npm install
+npm run start`;
+
+export const resturaUiPnpmCode = `cd apps/restura-ui
+pnpm install
+pnpm run start`;
+
+export const resturaUiYarnCode = `cd apps/restura-ui
+yarn install
+yarn start`;
+
+export const resturaUiBunCode = `cd apps/restura-ui
+bun install
+bun run start`;
+
+<Tabs>
+  <TabItem label="npm">
+    <Code code={resturaUiNpmCode} lang="bash"/>
+  </TabItem>
+  <TabItem label="pnpm">
+    <Code code={resturaUiPnpmCode} lang="bash"/>
+  </TabItem>
+  <TabItem label="yarn">
+    <Code code={resturaUiYarnCode} lang="bash"/>
+  </TabItem>
+  <TabItem label="bun">
+    <Code code={resturaUiBunCode} lang="bash"/>
+  </TabItem>
+</Tabs>
+
+With the application running, you can now access the visual editor at <a href="http://localhost:3000" target="_blank" rel="noopener noreferrer">http://localhost:3000</a> in the browser of your choice.
+
+
+## Sign In
+When you first open the Restura UI, you will be prompted to enter an auth token. Enter in the auth token and click the "SIGN IN" button.
+
+<Aside type="caution">
+The auth token you enter must match the auth token set in the `restura.config.mjs` file.
+</Aside>
+
+<Aside type="caution">
+The Restura UI connects to the Restura Engine on port 3001 by default. If you cannot login, make sure the Restura Engine is running and accessible at this port.
+</Aside>
+
+## Database Tables
+
+When you login, you will be navigated to the "Database" tab. Here you can view the database tables that are managed by Restura.
+
+## API Endpoints
+
+To view endpoints, click on the "API" tab. Here you can view the endpoints that are managed by Restura.
+
+## Apply Changes
+
+When you make changes to the database tables or endpoints, changes must be confirmed to take effect.
+- Click "Preview Schema" in the upper right corner to see the changes that will be applied
+- Click "Submit" to apply the changes
+
+Upon submission, the changes will be applied to the `restura.schema.json` file and the Restura Engine will automatically restart to apply the changes.

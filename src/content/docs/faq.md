@@ -13,7 +13,7 @@ Building REST APIs in Node.js typically involves repetitive boilerplate: route r
 
 ## Who is Restura for?
 
-Restura is designed for teams building data-driven applications with 25+ REST endpoints. It's particularly valuable for organizations with multiple projects or developers of varying experience levels, as the schema provides a consistent, auditable standard for API design. Smaller projects with only a handful of endpoints may find the setup overhead outweighs the benefits, but for larger applications—especially those with complex relational data, fine-grained permissions, or frequent schema changes—Restura significantly reduces development time and maintenance burden.
+Restura is designed for teams building data-driven applications with many REST endpoints. It's particularly valuable for organizations with multiple projects or developers of varying experience levels, as the schema provides a consistent, auditable standard for API design. Smaller projects with only a handful of endpoints may find the setup overhead outweighs the benefits, but for larger applications—especially those with complex relational data, fine-grained permissions, or frequent schema changes—Restura significantly reduces development time and maintenance burden.
 
 ## What inspired the creation of Restura?
 
