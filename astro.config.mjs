@@ -37,38 +37,38 @@ export default defineConfig({
 						{ label: 'Create a Custom Endpoint', slug: 'guides/custom-endpoint' }
 					]
 				},
-			{
-				label: 'Reference',
-				items: [
-					{ label: 'Config', slug: 'reference/config' },
-					{ label: 'Filter', slug: 'reference/filter' },
-					{ label: 'Schema', slug: 'reference/schema' },
-					{
-						label: 'Endpoints',
-						collapsed: true,
-						items: [
-							{ label: 'Overview', slug: 'reference/endpoints/overview' },
-							{ label: 'Parameters', slug: 'reference/endpoints/parameters' },
-							{ label: 'Responses', slug: 'reference/endpoints/responses' },
-							{ label: 'SQL Queries', slug: 'reference/endpoints/sql-queries' },
-							{ label: 'Custom Routes', slug: 'reference/endpoints/custom-routes' },
-							{ label: 'Permissions', slug: 'reference/endpoints/permissions' }
-						]
-					},
-					{
-						label: 'Database',
-						collapsed: true,
-						items: [
-							{ label: 'Tables', slug: 'reference/database/tables' },
-							{ label: 'Columns & Types', slug: 'reference/database/columns' },
-							{ label: 'Indexes & Foreign Keys', slug: 'reference/database/relationships' },
-							{ label: 'Constraints', slug: 'reference/database/constraints' },
-							{ label: 'Notifications', slug: 'reference/database/notifications' },
-							{ label: 'Permissions', slug: 'reference/database/permissions' }
-						]
-					}
-				]
-			},
+				{
+					label: 'Reference',
+					items: [
+						{ label: 'Config', slug: 'reference/config' },
+						{ label: 'Filter', slug: 'reference/filter' },
+						{ label: 'Schema', slug: 'reference/schema' },
+						{
+							label: 'Endpoints',
+							collapsed: true,
+							items: [
+								{ label: 'Overview', slug: 'reference/endpoints/overview' },
+								{ label: 'Parameters', slug: 'reference/endpoints/parameters' },
+								{ label: 'Responses', slug: 'reference/endpoints/responses' },
+								{ label: 'SQL Queries', slug: 'reference/endpoints/sql-queries' },
+								{ label: 'Custom Routes', slug: 'reference/endpoints/custom-routes' },
+								{ label: 'Permissions', slug: 'reference/endpoints/permissions' }
+							]
+						},
+						{
+							label: 'Database',
+							collapsed: true,
+							items: [
+								{ label: 'Tables', slug: 'reference/database/tables' },
+								{ label: 'Columns & Types', slug: 'reference/database/columns' },
+								{ label: 'Indexes & Foreign Keys', slug: 'reference/database/relationships' },
+								{ label: 'Constraints', slug: 'reference/database/constraints' },
+								{ label: 'Notifications', slug: 'reference/database/notifications' },
+								{ label: 'Permissions', slug: 'reference/database/permissions' }
+							]
+						}
+					]
+				},
 				{
 					label: 'Community',
 					autogenerate: { directory: 'community' }

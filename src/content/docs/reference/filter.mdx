@@ -58,11 +58,11 @@ Column paths cannot exceed 3 parts. `a.b.c.d` is rejected.
 
 ### Escaping Special Characters
 
-| Character       | Escape Sequence | Example                 | Result                               |
-| --------------- | --------------- | ----------------------- | ------------------------------------ | ---- |
-| `,` (comma)     | `\,`            | `(name,Doe\, John)`     | `"name" = 'Doe, John'`               |
-| `\|` (pipe)     | `\|`            | `(desc,has,A\|B)`       | `"desc"::text ILIKE '%A              | B%'` |
-| `\` (backslash) | `\\`            | `(path,sw,C:\\Windows)` | `"path"::text ILIKE E'C:\\Windows%'` |
+| Character       | Escape Sequence | Example                 | Result                                      |
+| --------------- | --------------- | ----------------------- | ------------------------------------------- |
+| `,` (comma)     | `\,`            | `(name,Doe\, John)`     | `"name" = 'Doe, John'`                      |
+| `\|` (pipe)     | `\|`            | `(desc,has,A\|B)`       | `"desc"::text ILIKE '%A\|B%'`               |
+| `\` (backslash) | `\\`            | `(path,sw,C:\\Windows)` | `"path"::text ILIKE E'C:\\\\Windows%'`      |
 
 Spaces do **not** require escaping:
 
@@ -78,11 +78,12 @@ Spaces do **not** require escaping:
 "name"::text ILIKE '%John Doe%'
 ```
 
+
 ### IN Operator Values
 
 Use pipes (`|`) to separate multiple values:
 
-**Filter:**
+**Example 1 - Filter:**
 
 ```
 (id,in,1|2|3)
@@ -96,7 +97,7 @@ Use pipes (`|`) to separate multiple values:
 
 ---
 
-**Filter:**
+**Example 2 - Filter:**
 
 ```
 (status,in,ACTIVE|PENDING|PROCESSING)
@@ -110,7 +111,7 @@ Use pipes (`|`) to separate multiple values:
 
 ---
 
-**Filter:**
+**Example 3 - Filter:**
 
 ```
 (status,in,In Progress|On Hold)
@@ -124,7 +125,7 @@ Use pipes (`|`) to separate multiple values:
 
 Escape literal pipes within values:
 
-**Filter:**
+**Example 4 - Filter:**
 
 ```
 (tags,in,red\|green|blue|yellow)
@@ -135,6 +136,7 @@ Escape literal pipes within values:
 ```sql
 "tags" IN ('red|green', 'blue', 'yellow')
 ```
+
 
 ### Logical Operators
 
@@ -147,7 +149,7 @@ Operators are **case-insensitive**: `AND`, `And`, `and` all work identically.
 
 #### Chaining Multiple Conditions
 
-**Filter:**
+**Example 1 - Filter:**
 
 ```
 (a,1)and(b,2)and(c,3)
@@ -161,7 +163,7 @@ Operators are **case-insensitive**: `AND`, `And`, `and` all work identically.
 
 ---
 
-**Filter:**
+**Example 2 - Filter:**
 
 ```
 (a,1)or(b,2)or(c,3)
@@ -175,7 +177,7 @@ Operators are **case-insensitive**: `AND`, `And`, `and` all work identically.
 
 ---
 
-**Filter:**
+**Example 3 - Filter:**
 
 ```
 (a,1)and(b,2)or(c,3)
@@ -187,11 +189,12 @@ Operators are **case-insensitive**: `AND`, `And`, `and` all work identically.
 "a" = 1 AND "b" = 2 OR "c" = 3
 ```
 
+
 ### Negation
 
 Prefix expressions with `!` to negate:
 
-**Filter:**
+**Example 1 - Filter:**
 
 ```
 !(status,DELETED)
@@ -205,7 +208,7 @@ NOT ("status" = 'DELETED')
 
 ---
 
-**Filter:**
+**Example 2 - Filter:**
 
 ```
 !(a,1)and(b,2)
@@ -219,7 +222,7 @@ NOT ("a" = 1) AND ("b" = 2)
 
 ---
 
-**Filter:**
+**Example 3 - Filter:**
 
 ```
 (a,1)and!(b,2)
@@ -233,7 +236,7 @@ NOT ("a" = 1) AND ("b" = 2)
 
 ---
 
-**Filter:**
+**Example 4 - Filter:**
 
 ```
 !(a,1)and!(b,2)
@@ -245,11 +248,12 @@ NOT ("a" = 1) AND ("b" = 2)
 NOT ("a" = 1) AND NOT ("b" = 2)
 ```
 
+
 ### Grouping
 
 Use parentheses to control precedence:
 
-**Filter:**
+**Example 1 - Filter:**
 
 ```
 ((a,1)or(b,2))
@@ -263,7 +267,7 @@ Use parentheses to control precedence:
 
 ---
 
-**Filter:**
+**Example 2 - Filter:**
 
 ```
 ((a,1)or(b,2))and((c,3)or(d,4))
@@ -277,7 +281,7 @@ Use parentheses to control precedence:
 
 Negate entire groups:
 
-**Filter:**
+**Example 3 - Filter:**
 
 ```
 !((a,1)or(b,2))
@@ -291,7 +295,7 @@ NOT (("a" = 1) OR ("b" = 2))
 
 ---
 
-**Filter:**
+**Example 4 - Filter:**
 
 ```
 ((a,1)or(b,2))and!((c,3)or(d,4))
@@ -303,6 +307,7 @@ NOT (("a" = 1) OR ("b" = 2))
 (("a" = 1) OR ("b" = 2)) AND NOT (("c" = 3) OR ("d" = 4))
 ```
 
+
 <Aside type="note">
 Maximum nesting depth is 1. Expressions like `(((a,1)or(b,2))and(c,3))` are rejected.
 </Aside>
@@ -311,7 +316,7 @@ Maximum nesting depth is 1. Expressions like `(((a,1)or(b,2))and(c,3))` are reje
 
 Whitespace is allowed around logical operators and after commas:
 
-**Filter:**
+**Example 1 - Filter:**
 
 ```
 (a,1) and (b,2)
@@ -325,7 +330,7 @@ Whitespace is allowed around logical operators and after commas:
 
 ---
 
-**Filter:**
+**Example 2 - Filter:**
 
 ```
 (status, ACTIVE)
@@ -339,7 +344,7 @@ Whitespace is allowed around logical operators and after commas:
 
 ---
 
-**Filter:**
+**Example 3 - Filter:**
 
 ```
 (price, gt, 100)
@@ -353,7 +358,7 @@ Whitespace is allowed around logical operators and after commas:
 
 Whitespace within values is preserved:
 
-**Filter:**
+**Example 4 - Filter:**
 
 ```
 (name,John Doe)
@@ -367,7 +372,7 @@ Whitespace within values is preserved:
 
 ---
 
-**Filter:**
+**Example 5 - Filter:**
 
 ```
 (title,has,hello world)
@@ -378,6 +383,7 @@ Whitespace within values is preserved:
 ```sql
 "title"::text ILIKE '%hello world%'
 ```
+
 
 ## Old Syntax (Deprecated)
 
@@ -410,7 +416,7 @@ When `type` is omitted:
 
 ### Old Syntax Column Paths
 
-**Filter:**
+**Example 1 - Filter:**
 
 ```
 (column:id,value:123,type:exact)
@@ -424,7 +430,7 @@ When `type` is omitted:
 
 ---
 
-**Filter:**
+**Example 2 - Filter:**
 
 ```
 (column:orderV2.id,value:215)
@@ -438,7 +444,7 @@ When `type` is omitted:
 
 ---
 
-**Filter:**
+**Example 3 - Filter:**
 
 ```
 (column:order.billingAddress.zip,value:47,type:contains)
@@ -450,9 +456,10 @@ When `type` is omitted:
 "order"."billingAddress"->>'zip'::text ILIKE '%47%'
 ```
 
+
 ### Old Syntax Logical Operators
 
-**Filter:**
+**Example 1 - Filter:**
 
 ```
 (column:id,value:251)or(column:id,value:278)
@@ -466,7 +473,7 @@ When `type` is omitted:
 
 ---
 
-**Filter:**
+**Example 2 - Filter:**
 
 ```
 (column:id,value:215)AND(column:totalPriceCents,value:3069,type:greaterThan)
@@ -478,9 +485,10 @@ When `type` is omitted:
 ("id" = 215) AND ("totalPriceCents" > 3069)
 ```
 
+
 ### Old Syntax Grouping and Negation
 
-**Filter:**
+**Example 1 - Filter:**
 
 ```
 ((column:id,value:251)or(column:id,value:278))AND(column:status,value:ACTIVE,type:exact)
@@ -494,7 +502,7 @@ When `type` is omitted:
 
 ---
 
-**Filter:**
+**Example 2 - Filter:**
 
 ```
 !(column:userId,value:15234,type:exact)
@@ -508,7 +516,7 @@ NOT ("userId" = 15234)
 
 ---
 
-**Filter:**
+**Example 3 - Filter:**
 
 ```
 !(column:id,value:4504055,type:contains)and!(column:name,value:jim,type:endsWith)
@@ -519,6 +527,7 @@ NOT ("userId" = 15234)
 ```sql
 NOT ("id"::text ILIKE '%4504055%') and NOT ("name"::text ILIKE '%jim')
 ```
+
 
 ## Syntax Comparison
 
@@ -559,7 +568,7 @@ The filter parser is designed to prevent SQL injection:
 
 Examples of safely escaped input:
 
-**Filter:**
+**Example 1 - Filter:**
 
 ```
 (name,O'Brien)
@@ -573,7 +582,7 @@ Examples of safely escaped input:
 
 ---
 
-**Filter:**
+**Example 2 - Filter:**
 
 ```
 (password,' OR '1'='1)
@@ -587,7 +596,7 @@ Examples of safely escaped input:
 
 ---
 
-**Filter:**
+**Example 3 - Filter:**
 
 ```
 (id,1; DROP TABLE users; --)
@@ -601,7 +610,7 @@ Examples of safely escaped input:
 
 ---
 
-**Filter:**
+**Example 4 - Filter:**
 
 ```
 (path,C:\\Windows\\System32)
@@ -612,6 +621,7 @@ Examples of safely escaped input:
 ```sql
 "path" = E'C:\\Windows\\System32'
 ```
+
 
 ## Error Cases
 
