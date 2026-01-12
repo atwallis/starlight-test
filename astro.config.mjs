@@ -41,8 +41,19 @@ export default defineConfig({
 					label: 'Reference',
 					items: [
 						{ label: 'Config', slug: 'reference/config' },
-						{ label: 'Filter', slug: 'reference/filter' },
 						{ label: 'Schema', slug: 'reference/schema' },
+						{
+							label: 'Database',
+							collapsed: true,
+							items: [
+								{ label: 'Tables', slug: 'reference/database/tables' },
+								{ label: 'Columns & Types', slug: 'reference/database/columns' },
+								{ label: 'Indexes & Foreign Keys', slug: 'reference/database/relationships' },
+								{ label: 'Constraints', slug: 'reference/database/constraints' },
+								{ label: 'Notifications', slug: 'reference/database/notifications' },
+								{ label: 'Permissions', slug: 'reference/database/permissions' }
+							]
+						},
 						{
 							label: 'Endpoints',
 							collapsed: true,
@@ -56,15 +67,13 @@ export default defineConfig({
 							]
 						},
 						{
-							label: 'Database',
+							label: 'Filter',
 							collapsed: true,
 							items: [
-								{ label: 'Tables', slug: 'reference/database/tables' },
-								{ label: 'Columns & Types', slug: 'reference/database/columns' },
-								{ label: 'Indexes & Foreign Keys', slug: 'reference/database/relationships' },
-								{ label: 'Constraints', slug: 'reference/database/constraints' },
-								{ label: 'Notifications', slug: 'reference/database/notifications' },
-								{ label: 'Permissions', slug: 'reference/database/permissions' }
+								{ label: 'Overview', slug: 'reference/filter' },
+								{ label: 'New Syntax', slug: 'reference/filter/new-syntax' },
+								{ label: 'Old Syntax', slug: 'reference/filter/old-syntax' },
+								{ label: 'Advanced Topics', slug: 'reference/filter/advanced' }
 							]
 						}
 					]

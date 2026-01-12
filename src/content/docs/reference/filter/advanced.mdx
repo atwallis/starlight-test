@@ -1,0 +1,95 @@
+---
+title: Filter - Advanced Topics
+description: Value types, SQL injection prevention, and error handling
+---
+
+## Value Types
+
+Values are automatically typed based on content:
+
+| Input      | Type   | SQL Output   |
+| ---------- | ------ | ------------ |
+| `123`      | Number | `123`        |
+| `-45.67`   | Number | `-45.67`     |
+| `ACTIVE`   | String | `'ACTIVE'`   |
+| `John Doe` | String | `'John Doe'` |
+
+## SQL Injection Prevention
+
+The filter parser is designed to prevent SQL injection:
+
+1. **Column names** are always double-quoted as SQL identifiers
+2. **Values** are escaped using `pg-format` library
+3. **Parentheses** in values are rejected by the grammar (cannot inject sub-expressions)
+4. **SQL keywords** in values become harmless literals
+
+Examples of safely escaped input:
+
+**Example 1 - Filter:**
+
+```
+(name,O'Brien)
+```
+
+**SQL:**
+
+```sql
+"name" = 'O''Brien'
+```
+
+---
+
+**Example 2 - Filter:**
+
+```
+(password,' OR '1'='1)
+```
+
+**SQL:**
+
+```sql
+"password" = ''' OR ''1''=''1'
+```
+
+---
+
+**Example 3 - Filter:**
+
+```
+(id,1; DROP TABLE users; --)
+```
+
+**SQL:**
+
+```sql
+"id" = '1; DROP TABLE users; --'
+```
+
+---
+
+**Example 4 - Filter:**
+
+```
+(path,C:\\Windows\\System32)
+```
+
+**SQL:**
+
+```sql
+"path" = E'C:\\Windows\\System32'
+```
+
+
+## Error Cases
+
+The parser rejects malformed input with a `SyntaxError`:
+
+| Invalid Input              | Reason                      |
+| -------------------------- | --------------------------- |
+| `()`                       | Empty expression            |
+| `(field)`                  | Missing value               |
+| `(field,)`                 | Empty value                 |
+| `(field,gt,)`              | Empty operator value        |
+| `(,value)`                 | Missing column              |
+| `(a.b.c.d,value)`          | Column path exceeds 3 parts |
+| `(((a,1)or(b,2))and(c,3))` | Nesting depth exceeds limit |
