@@ -11,9 +11,8 @@ This guide walks you through creating an endpoint with your own TypeScript imple
 If your endpoint returns a custom response structure:
 
 1. Navigate to **Global** in the sidebar
-2. Click the **Custom Types** tab
-3. Click **Add Custom Type**
-4. Enter your TypeScript interface:
+2. You will be navigated to the **Custom Types** paged
+3. Enter your TypeScript interface:
 
 ```typescript
 export interface AuthResponse {
@@ -24,13 +23,11 @@ export interface AuthResponse {
 }
 ```
 
-5. Click **Save**
-
 ## Step 2: Create the Endpoint
 
-1. Navigate to **Endpoints**
+1. Navigate to **API**
 2. Click **New**
-3. Set **Type** to `CUSTOM_ONE` (or `CUSTOM_ARRAY` for lists)
+3. Set **Type** to "Custom One" or "Custom Array" or "Custom Paged"
 4. Fill in name, description, method, and path
 
 ## Step 3: Add Request Parameters
@@ -51,7 +48,7 @@ Type each parameter name, click **Add**, then configure:
 
 ## Step 5: Apply Schema Changes
 
-Click **Preview Schema**, review, and **Apply Changes**.
+Click **Preview Schema**, review, and **Submit**.
 
 ## Step 6: Create the Handler File
 
