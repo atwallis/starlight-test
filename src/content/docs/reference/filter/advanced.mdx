@@ -14,6 +14,153 @@ Values are automatically typed based on content:
 | `ACTIVE`   | String | `'ACTIVE'`   |
 | `John Doe` | String | `'John Doe'` |
 
+## Type Casting
+
+When PostgreSQL cannot compare values of different types, you can explicitly cast values using the `::` operator followed by a type name.
+
+### Supported Cast Types
+
+| Cast Operator  | PostgreSQL Type | Description                    |
+| -------------- | --------------- | ------------------------------ |
+| `::text`       | `TEXT`          | String/text type               |
+| `::int`        | `INTEGER`       | 32-bit integer                 |
+| `::bigint`     | `BIGINT`        | 64-bit integer                 |
+| `::numeric`    | `NUMERIC`       | Arbitrary precision decimal    |
+| `::boolean`    | `BOOLEAN`       | Boolean (true/false)           |
+| `::date`       | `DATE`          | Date (without time)            |
+| `::timestamp`  | `TIMESTAMP`     | Timestamp (without timezone)   |
+| `::timestamptz`| `TIMESTAMPTZ`   | Timestamp (with timezone)      |
+
+### Examples
+
+**Example 1 - Filter:**
+
+```
+(code,1::text)
+```
+
+**SQL:**
+
+```sql
+"code" = '1'::text
+```
+
+**Explanation:** The column `code` is a string type, but `1` is automatically detected as a number. Casting `1::text` allows PostgreSQL to compare the string column with a text value.
+
+---
+
+**Example 2 - Filter:**
+
+```
+(userId,42::bigint)
+```
+
+**SQL:**
+
+```sql
+"userId" = 42::bigint
+```
+
+---
+
+**Example 3 - Filter:**
+
+```
+(price,100.50::numeric)
+```
+
+**SQL:**
+
+```sql
+"price" = 100.50::numeric
+```
+
+---
+
+**Example 4 - Filter:**
+
+```
+(isActive,true::boolean)
+```
+
+**SQL:**
+
+```sql
+"isActive" = true::boolean
+```
+
+---
+
+**Example 5 - Filter:**
+
+```
+(createdAt,2024-01-15::date)
+```
+
+**SQL:**
+
+```sql
+"createdAt" = '2024-01-15'::date
+```
+
+---
+
+**Example 6 - Filter:**
+
+```
+(updatedAt,2024-01-15 10:30:00::timestamp)
+```
+
+**SQL:**
+
+```sql
+"updatedAt" = '2024-01-15 10:30:00'::timestamp
+```
+
+---
+
+**Example 7 - Filter:**
+
+```
+(scheduledAt,2024-01-15 10:30:00-05::timestamptz)
+```
+
+**SQL:**
+
+```sql
+"scheduledAt" = '2024-01-15 10:30:00-05'::timestamptz
+```
+
+### Type Casting with Operators
+
+Type casting works with all comparison operators:
+
+**Example 8 - Filter:**
+
+```
+(age,18::int)and(balance,gt,1000.00::numeric)
+```
+
+**SQL:**
+
+```sql
+"age" = 18::int AND "balance" > 1000.00::numeric
+```
+
+---
+
+**Example 9 - Filter:**
+
+```
+(code,in,A1::text|B2::text|C3::text)
+```
+
+**SQL:**
+
+```sql
+"code" IN ('A1'::text, 'B2'::text, 'C3'::text)
+```
+
 ## SQL Injection Prevention
 
 The filter parser is designed to prevent SQL injection:
