@@ -29,4 +29,4 @@ Yes. Restura is actively maintained and developed as it powers production applic
 
 ## How can I contribute?
 
-Contributions are welcome! Start by reviewing our contribution guide in the repository. The project uses a monorepo structure with `@restura/core` (the engine), `@restura/internal` (shared utilities), and `restura-ui` (the visual interface). Good first contributions include improving documentation, adding new validators, or extending the schema comparison tool. For larger features, open an issue first to discuss the approach.
+Contributions are welcome! Start by reviewing our [contribution guide](../community/contribution).

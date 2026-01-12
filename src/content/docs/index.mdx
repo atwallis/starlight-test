@@ -8,7 +8,7 @@ hero:
     file: ../../assets/logo.webp
   actions:
     - text: Get Started
-      link: /starlight-test/getting-started
+      link: /starlight-test/quickstart
       icon: right-arrow
     # - text: Read the Starlight docs
     #   link: https://starlight.astro.build
@@ -18,11 +18,15 @@ hero:
 
 import { Card, CardGrid } from '@astrojs/starlight/components';
 
-Restura generates fully-functional Express.js endpoints from a JSON schema. Define your entire API—database tables, routes, request validation, response structure, and authorization—in a single schema file. A companion visual UI lets you create and modify endpoints without writing code, while automatically generating TypeScript types for your request and response objects.
+Restura generates fully-functional Express.js endpoints from a JSON schema.
+
+Define your entire API—database tables, routes, request validation, response structure, and authorization—in a single schema file. A companion visual UI lets you create and modify endpoints without writing code, while automatically generating TypeScript types for your request and response objects.
 
 ## Why Restura?
 
-Building REST APIs in Node.js typically involves repetitive boilerplate: route registration, request parsing/validation, SQL query construction, response formatting, and authorization checks. Restura eliminates this by generating all of it from a declarative schema.
+Building REST APIs in Node.js typically involves repetitive boilerplate.
+
+Restura eliminates this by generating all of it from a declarative schema.
 
 <CardGrid stagger>
 	<Card title="Declarative Schema" icon="document">

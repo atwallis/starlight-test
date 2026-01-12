@@ -6,9 +6,9 @@ import { Aside, Code, TabItem, Tabs } from '@astrojs/starlight/components';
 
 The visual editor is a companion application to the Restura Engine that allows you to visually create and modify the database tables and endpoints found in the `restura.schema.json` file.
 
-## Clone the Restura UI repository
+## Clone the Restura repository
 
-Currently, there is no standalone application binary for the Restura UI. You will need to download and run the application locally.
+Currently, there is no standalone application binary for the visual editor. You will need to download and run the application locally.
 
 Start by cloning the repository:
 
@@ -63,32 +63,24 @@ bun run start`;
   </TabItem>
 </Tabs>
 
-With the application running, you can now access the visual editor at <a href="http://localhost:3000" target="_blank" rel="noopener noreferrer">http://localhost:3000</a> in the browser of your choice.
+With the application running, you can now access the visual editor at: <a href="http://localhost:3000" target="_blank" rel="noopener noreferrer">http://localhost:3000</a>.
 
 
 ## Sign In
-When you first open the Restura UI, you will be prompted to enter an auth token. Enter in the auth token and click the "SIGN IN" button.
 
-<Aside type="note">
-The auth token you enter must match the auth token set in the `restura.config.mjs` file.
-</Aside>
+When the application opens, you will be prompted to enter a token. The token is the `authToken` that is set in the `restura.config.mjs` file.
 
-<Aside type="caution">
-The Restura UI connects to the Restura Engine on port 3001 by default. If you cannot login, make sure the Restura Engine is running and accessible at this port.
-</Aside>
+Click the "SIGN IN" button to login.
 
-## Database Tables
+Congratulations! You can now start creating and modifying your database tables and endpoints using the visual editor.
 
-When you login, you will be navigated to the "Database" tab. Here you can view the database tables that are managed by Restura.
+## Next Steps
 
-## API Endpoints
+Now that you have run the Restura UI, you can:
 
-To view endpoints, click on the "API" tab. Here you can view the endpoints that are managed by Restura.
+- **[Create your first database table](../guides/database-table)** - Define tables using the Visual Editor
+- **[Build a standard endpoint](../guides/standard-endpoint)** - Create a GET endpoint that queries your data
 
-## Apply Changes
-
-When you make changes to the database tables or endpoints, changes must be confirmed to take effect.
-- Click "Preview Schema" in the upper right corner to see the changes that will be applied
-- Click "Submit" to apply the changes
-
-Upon submission, the changes will be applied to the `restura.schema.json` file and the Restura Engine will automatically restart to apply the changes.
+Or dive deeper:
+- [Explore the schema reference](../reference/schema)
+- [Explore the configuration reference](../reference/config)

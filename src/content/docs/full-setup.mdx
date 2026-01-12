@@ -165,11 +165,11 @@ const app = express();
 
 // Create a PostgreSQL connection pool
 const pool = new PsqlPool({
-  host: "postgres", // Replace with your database host
-  port: "5432", // Replace with your database port
+  host: "<host>", // Replace with your database host
+  port: "<port>", // Replace with your database port
   user: "postgres", // Replace with your database user
-  password: "postgres", // Replace with your database password
-  database: "restura", // Replace with your database name
+  password: "<password>", // Replace with your database password
+  database: "<database>", // Replace with your database name
 });
 
 // Define an authentication handler

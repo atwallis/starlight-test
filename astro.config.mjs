@@ -20,15 +20,15 @@ export default defineConfig({
 				{
 					label: 'Start Here',
 					items: [
-						{ label: 'Getting Started', slug: 'getting-started' },
+						{ label: 'Quickstart', slug: 'quickstart' },
 						{ label: 'Run the Visual Editor', slug: 'visual-editor' },
 						{ label: 'FAQ', slug: 'faq' }
 					]
 				},
-				// {
-				// 	label: 'Tutorials',
-				// 	autogenerate: { directory: 'tutorials' }
-				// },
+				{
+					label: 'Tutorials',
+					autogenerate: { directory: 'tutorials' }
+				},
 				{
 					label: 'Guides',
 					items: [
@@ -42,8 +42,8 @@ export default defineConfig({
 					autogenerate: { directory: 'reference' }
 				},
 				{
-					label: 'Contributing',
-					autogenerate: { directory: 'contributing' }
+					label: 'Community',
+					autogenerate: { directory: 'community' }
 				}
 			],
 			customCss: ['./src/styles/global.css'],
