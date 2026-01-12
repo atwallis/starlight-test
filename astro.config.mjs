@@ -3,6 +3,7 @@ import starlight from '@astrojs/starlight';
 import svelte from '@astrojs/svelte';
 import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'astro/config';
+import starlightLlmsTxt from 'starlight-llms-txt';
 import starlightThemeGalaxy from 'starlight-theme-galaxy';
 
 // https://astro.build/config
@@ -84,7 +85,7 @@ export default defineConfig({
 				}
 			],
 			customCss: ['./src/styles/global.css'],
-			plugins: [starlightThemeGalaxy()]
+			plugins: [starlightThemeGalaxy(), starlightLlmsTxt()]
 		}),
 		svelte()
 	],
